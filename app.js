@@ -38,6 +38,28 @@ app.use("/", function(req, res, next){
     next();
 });
 
+var getDate = function() { //make this getDate and use the output as a parameter in all the API calls??
+	var d = new Date();
+	var da = d.toString().split(' ');
+	var months = {
+		'Jan': '01',
+		'Feb': '02',
+		'Mar': '03',
+		'Apr': '04',
+		'May': '05',
+		'Jun': '06',
+		'Jul': '07',
+		'Aug': '08',
+		'Sep': '09',
+		'Oct': '10',
+		'Nov': '11',
+		'Dec': '12',
+	};
+
+	var date = da[3] + '-' + months[da[1]] + '-' + (Number(da[2]) - 1); 
+
+	return date;
+};
 
 app.get('/', function(req, res){
 // THIS QUERY GETS all new registered ltd companies from given date 
@@ -45,7 +67,7 @@ app.get('/', function(req, res){
 // Question is, how do I insert previous day to the query every time?
 //to proceed to company page, needs signup
 	// var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&companyRegistrationFrom=2015-04-13&entryCode=PERUS&noticeRegistrationType=U";
-	var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&companyRegistrationFrom=2015-04-14&entryCode=PERUS&noticeRegistrationFrom=2015-04-14&noticeRegistrationType=U";
+	var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&entryCode=PERUS&noticeRegistrationFrom="+getDate();+"&noticeRegistrationType=U";
 	var request1 = function(cb) {
 		request(urlBoom, function (error, response, header) {
 		    if (!error && response.statusCode == 200) {
@@ -58,8 +80,7 @@ app.get('/', function(req, res){
 		    }
 		});
 	};
-
-	var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom=2015-04-13";
+	var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom="+getDate();
 
 	var request2 = function(cb) {
 		request(urlBust, function (error, response, header) {
@@ -107,37 +128,38 @@ app.get('/user/profile', function(req, res){
 	res.render('user/profile');
 });
 
-var getURL = function() {
-	var d = new Date();
-	var da = d.toString().split(' ');
-	var months = {
-		'Apr': '04',
-		'Jul': '07',
-	};
 
-	var date = da[3] + '-' + months[da[1]] + '-' + (Number(da[2]) - 1); 
-
-		var url = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&companyRegistrationFrom="+date+"&entryCode=PERUS&noticeRegistrationFrom=2015-04-14&noticeRegistrationType=U";
-
-	return url;
-};
-
-app.get('/companylist', function(req, res){
-	var url = getURL();
+app.get('/companylist/:type', function(req, res){
 	
-	request(url, function (error, response, body) {
-	    if (!error && response.statusCode == 200) {
-	      //console.log('request');
-	      var jsonData = JSON.parse(body);
-	      console.log(jsonData);
-	      //THIS WORKS var name = jsonData.name;
-	      var results = jsonData.results;
-	      // THIS WORKS res.render('companylist', {companyName: jsonData.results[0].name, companyId: jsonData.results[0].businessId});
-	      // res.render('companylist', {companyName: jsonData.results[1].name, companyId: jsonData.results[1].businessId});
-	      res.render('companylist', {companyList: jsonData.results});
-	    }
-	});
-		
+	var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&entryCode=PERUS&noticeRegistrationFrom="+getDate();+"&noticeRegistrationType=U";
+	var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom="+getDate();
+	
+
+	// IF request has boom in query, do this
+	if (req.params.type === "boom") {
+
+		request(urlBoom, function (error, response, body) {
+		    if (!error && response.statusCode == 200) {
+		      
+				var jsonData = JSON.parse(body);
+				console.log(jsonData);
+				var results = jsonData.results;
+				res.render('companylist', {companyList: jsonData.results});
+		    }
+		});
+
+	// IF request has bust in query, do this	
+	} else if (req.params.type === "bust") {
+
+		request(urlBust, function (error, response, body) {
+		    if (!error && response.statusCode == 200) {
+		      var jsonData = JSON.parse(body);
+		      console.log(jsonData);
+		      var results = jsonData.results;
+		      res.render('companylist', {companyList: jsonData.results});
+		    }
+		});
+	}		
 });
 
 app.delete('/logout', function(req,res){
