@@ -13,6 +13,12 @@
 				<p>Y-tunnus: <%= businessId %></p>
 				<p>Kotipaikka: <%= office %></p>
 
+				<form method="POST" action="/favorites">
+					
+					<input type="text" name="business_id" value="<%=businessId%>" style="display:none;">
+					<button>Save</button>
+				</form>
+
 			</div>
 		</div>
 	</div>

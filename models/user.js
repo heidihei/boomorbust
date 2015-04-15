@@ -29,10 +29,29 @@ module.exports = function (sequelize, DataTypes){
       //  bill.checkPassword("foo"), jane.checkPassword("bar")
       checkPassword: function(password) {
         return bcrypt.compareSync(password, this.passwordDigest);
-      }
+      },
+
+//*********************************************************************
+
+    //IS THIS CORRECT???
+      addToFavs: function(db, companyId) {
+        return db.Favorites
+        .create({company_id: companyId, user_id: this.id});
+       }
     },
 
+//*********************************************************************
+  
+    //IS THIS CORRECT???
+
     classMethods: {
+
+      associate: function(models) {
+        //this.hasMany(models.Favorites);
+      },
+
+//*********************************************************************
+
       // these run on User, e.g 
       //  db.User.createSecure("blah@blah.com", "blahblah")
 

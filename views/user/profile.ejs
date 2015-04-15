@@ -11,10 +11,16 @@
 <body>
 	<div class="container">
 
-		<h1>Hi, User!</h1>
+		<h1>Hi there!</h1>
 		<form method="POST" action="/logout?_method=DELETE">
 			<button>Logout</button>
 		</form>
+	<p>Companies you're following:</p>
+		<% favorites.forEach(function(company){ %>
+
+						<h1><a class="companyLink" href="/company/<%=company.company_id%>"><%= company.company_id %></a></h1>
+		<%	})	%>
+
 
 	</div>
 </body>
