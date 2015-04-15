@@ -45,7 +45,7 @@ app.get('/', function(req, res){
 // Question is, how do I insert previous day to the query every time?
 //to proceed to company page, needs signup
 	// var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&companyRegistrationFrom=2015-04-13&entryCode=PERUS&noticeRegistrationType=U";
-	var urlBoom = "http://avoindata.prh.fi:80/tr/v1/publicnotices?totalResults=true&resultsFrom=0&noticeRegistrationFrom=2015-04-13&noticeRegistrationType=U";
+	var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&companyRegistrationFrom=2015-04-14&entryCode=PERUS&noticeRegistrationFrom=2015-04-14&noticeRegistrationType=U";
 	var request1 = function(cb) {
 		request(urlBoom, function (error, response, header) {
 		    if (!error && response.statusCode == 200) {
@@ -107,9 +107,23 @@ app.get('/user/profile', function(req, res){
 	res.render('user/profile');
 });
 
-app.get('/companylist', function(req, res){
+var getURL = function() {
+	var d = new Date();
+	var da = d.toString().split(' ');
+	var months = {
+		'Apr': '04',
+		'Jul': '07',
+	};
 
-	var url = "http://avoindata.prh.fi:80/tr/v1/publicnotices?totalResults=true&resultsFrom=0&noticeRegistrationFrom=2015-04-13&noticeRegistrationType=U";
+	var date = da[3] + '-' + months[da[1]] + '-' + (Number(da[2]) - 1); 
+
+		var url = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&companyRegistrationFrom="+date+"&entryCode=PERUS&noticeRegistrationFrom=2015-04-14&noticeRegistrationType=U";
+
+	return url;
+};
+
+app.get('/companylist', function(req, res){
+	var url = getURL();
 	
 	request(url, function (error, response, body) {
 	    if (!error && response.statusCode == 200) {
@@ -119,7 +133,8 @@ app.get('/companylist', function(req, res){
 	      //THIS WORKS var name = jsonData.name;
 	      var results = jsonData.results;
 	      // THIS WORKS res.render('companylist', {companyName: jsonData.results[0].name, companyId: jsonData.results[0].businessId});
-	      res.render('companylist', {companyName: jsonData.results[1].name, companyId: jsonData.results[1].businessId, companyOffice: jsonData.results[1].registeredOffice});
+	      // res.render('companylist', {companyName: jsonData.results[1].name, companyId: jsonData.results[1].businessId});
+	      res.render('companylist', {companyList: jsonData.results});
 	    }
 	});
 		
@@ -130,10 +145,27 @@ app.delete('/logout', function(req,res){
 	res.redirect('/');
 });
 
-//app.get('company/:id', function(req, res){
-	//res.render('companies');
+
+app.get('/company/:id', function(req, res){
+	var companyId = req.params.id;
+	console.log(companyId);	
+
+	
+	var url = "http://avoindata.prh.fi:80/bis/v1/"+companyId;
+
+	request(url, function (error, response, body){
+	if (!error && response.statusCode === 200) {
+	 		var jsonData = JSON.parse(body);
+	 		console.log(jsonData);
+	 		res.render('company', {
+	 			companyName: jsonData.results[0].name,
+	 			businessId: jsonData.results[0].businessId,
+	 			office: jsonData.results[0].registedOffices[0].name,
+	 		});
+		}
+	});
 	//add save button to the page
-//});
+});
 
 app.get('/user/login', function(req,res){
 	req.currentUser().then(function(user){

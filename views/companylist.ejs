@@ -7,16 +7,17 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 </head>
 <body>
-	<div class="container">				
-		
+	<div class="container">						
 
 		<div class="col-xs-6 col-xs-offset-3">
+					<% companyList.forEach(function(company){ %>
 
-					<h1><%= companyName %></h1> <!--MAKE THIS A LINK TO COMPANY PAGE-->
+						<h1><a class="companyLink" href="/company/<%=company.businessId%>"><%= company.name %></a></h1> <!--MAKE THIS A LINK TO COMPANY PAGE-->
 					<ul>
-						<li>Y-tunnus: <%= companyId %></li>
-						<li>Kotipaikka: <%= companyOffice %></li>
+						<li>Y-tunnus: <%= company.businessId %></li>
 					</ul>
+				<%	})	%>	
+					
 				</div>
 		
 	</div>
