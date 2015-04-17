@@ -8,19 +8,25 @@
 
 </head>
 <body>
-	<div class="container">
+	<div class="navigationHome">
+		<div class="navright">
+			<li><a href="/">Home</a></li>
+		</div>
+	</div>
 
+		
+	<div class="companyList">
 		<h1>Hi there!</h1>
-		<form method="POST" action="/logout?_method=DELETE">
-			<button>Logout</button>
-		</form>
-	<p>Companies you're following:</p>
-		<% favorites.forEach(function(company){ %>
+		
+		<p>Companies you're following:</p>
+			<% favorites.forEach(function(company){ %>
 
 						<h1><a class="companyLink" href="/company/<%=company.company_id%>"><%= company.company_id %></a></h1>
 		<%	})	%>
 
-
+		<form method="POST" action="/logout?_method=DELETE">
+			<button>Logout</button>
+		</form>
 	</div>
 </body>
 </html>

@@ -12,7 +12,6 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 
-//CREATES A SESSION
 app.use(session({
     secret: "secretsecret",
     resave: false,
@@ -39,7 +38,8 @@ app.use("/", function(req, res, next){
     next();
 });
 
-var getDate = function() { //this will get the current date -1 for each API call
+//this will get the current date -1 day for each API call because the PRH database is updated at the end of the day
+var getDate = function() { 
 	var d = new Date();
 	var da = d.toString().split(' ');
 	var months = {
@@ -75,8 +75,8 @@ app.get('/', function(req, res){
 		    }
 		});
 	};
+	
 	var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom="+getDate();
-
 	var request2 = function(cb) {
 		request(urlBust, function (error, response, header) {
 			console.log('in here', response.statusCode);
@@ -119,7 +119,6 @@ app.get('/user/profile', function(req, res){
 	}).then(function(favorites){
 		res.render('user/profile', {favorites: favorites});
 	});
-	//res.render('user/profile', {favorites: []});
 });
 
 
@@ -129,7 +128,7 @@ app.get('/companylist/:type', function(req, res){
 	var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&maxResults=150&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom="+getDate();
 	
 
-	// IF request has boom in query, do this
+	// IF request has boom in it, do this
 	if (req.params.type === "boom") {
 
 		request(urlBoom, function (error, response, body) {
@@ -142,7 +141,7 @@ app.get('/companylist/:type', function(req, res){
 		    }
 		});
 
-	// IF request has bust in query, do this	
+	// IF request has bust in it, do this	
 	} else if (req.params.type === "bust") {
 
 		request(urlBust, function (error, response, body) {
@@ -166,7 +165,7 @@ app.get('/company/:id', function(req, res){
 	var companyId = req.params.id;
 	console.log(companyId);	
 
-	
+//THIS will call another API that provides more detailed info on companies	
 	var url = "http://avoindata.prh.fi:80/bis/v1/"+companyId;
 
 	request(url, function (error, response, body){
@@ -180,12 +179,8 @@ app.get('/company/:id', function(req, res){
 	 		});
 		}
 	});
-	//add save button to the page
 });
 
-
-//*********************************************************************
-//MAKE ROUTE FOR SAVING TO DATABASE
 
 app.post('/favorites', function(req, res){
 	req.currentUser().then(function(user){
@@ -205,9 +200,6 @@ app.get('/user/login', function(req,res){
 	});
 });
 
-//*********************************************************************
-
-//WHAT'S WRONG WITH THIS
 app.post('/user/login', function(req,res){
 	var email = req.body.email;
 	var password = req.body.password;
@@ -222,6 +214,5 @@ app.post('/user/login', function(req,res){
 	  }); 
 });
 
-//*********************************************************************
 
 app.listen(process.env.PORT || 3000);

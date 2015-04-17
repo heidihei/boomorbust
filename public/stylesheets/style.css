@@ -12,6 +12,10 @@ a  {
 	font-family: 'Permanent Marker', cursive;
 	}
 
+a:hover {
+	color:red;
+	}
+
 h1 {
 	font-family: 'Permanent Marker', cursive;
 	color: white;
@@ -29,15 +33,16 @@ li {
 
 p {
 	font-family: 'Permanent Marker', cursive;
-	font-size: 28px;
+	font-size: 21px;
 	color: white;
+	padding: 3px;
 	}
 
 .about {
-	margin: 40px;
+	margin-left: 10%;
+	margin-right: 10%;
 	position: relative;
 	background-color: rgba(30,30,30,0.7);
-	/*bottom: -100px;*/
 }
 
 .big {

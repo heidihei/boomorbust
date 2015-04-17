@@ -22,9 +22,10 @@
 	<div class="companyList">
 		<% companyList.forEach(function(company){ %>
 
-		<h1><a class="companyLink" href="/company/<%=company.businessId%>"><%= company.name %></a></h1> <!--MAKE THIS A LINK TO COMPANY PAGE-->
+		<h1><a class="companyLink" href="/company/<%=company.businessId%>"><%= company.name %></a></h1>
 		<ul>
-			<p>Y-tunnus: <%= company.businessId %></p>
+			<p>Business-ID: <%= company.businessId %></p>
+			<p>Registered: <%= company.registrationDate %></p>
 		</ul>
 		<%	})	%>	
 					
