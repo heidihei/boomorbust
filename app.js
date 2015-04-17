@@ -10,13 +10,14 @@ var methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static('public'));
 
 //CREATES A SESSION
 app.use(session({
     secret: "secretsecret",
     resave: false,
     save: {
-        uninitiialize: true
+    uninitiialize: true
     }
 }));
 
@@ -56,7 +57,7 @@ var getDate = function() { //this will get the current date -1 for each API call
 		'Dec': '12',
 	};
 
-	var date = da[3] + '-' + months[da[1]] + '-' + (Number(da[2]) - 1); 
+	var date = da[3] + '-' + months[da[1]] + '-' + (Number(da[2]) - 2); 
 
 	return date;
 };
@@ -67,7 +68,7 @@ app.get('/', function(req, res){
 	var request1 = function(cb) {
 		request(urlBoom, function (error, response, header) {
 		    if (!error && response.statusCode == 200) {
-		      console.log('request1');
+		      console.log('request1', getDate());
 		      var jsonData = JSON.parse(header);
 		      var totalBoom = jsonData.totalResults;
 		      cb(null, totalBoom);
@@ -78,6 +79,7 @@ app.get('/', function(req, res){
 
 	var request2 = function(cb) {
 		request(urlBust, function (error, response, header) {
+			console.log('in here', response.statusCode);
 		    if (!error && response.statusCode == 200) {
 		      console.log('request2');
 		      var jsonData = JSON.parse(header);

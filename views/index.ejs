@@ -2,27 +2,51 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<title>Home: Boom or Bust</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/stylesheets/style.css">
+   
+	<title>Boom or Bust</title>
 
 </head>
+
+
 <body>
-
-	<div class="container">
-		<div>
-			<a href="/user/login">Login</a>
-			<a href="/user/signup">Sign Up</a>
+	<div class="content">
+		<div class="navigationHome">
+				<div class="navright">
+					<li><a href="/">Home</a></li>
+					<li><a href="/user/login">Login</a></li>
+					<li><a href="/user/signup">Sign Up</a></li>
+				</div>
 		</div>
 
-		<h1>Boom or Bust</h1>
-
-		<div class="boom">
-			<a href="/companylist/boom" type="boom"> Boom: <%= boom %></a>
-		</div>
-		<div class="bust">
-			<a href="/companylist/bust" type"bust"> Bust: <%= bust %></a>
+		<div class="logo">
+			<h1 class="logoHeader">Boom or Bust</h1>
 		</div>
 
+		<div class="companies">
+			<div class="companyTotal">
+				<div class="companytype">	
+					<h3>Companies founded:</h3>
+				</div>
+				<div>
+					<a href="/companylist/boom" type="boom" class="big"><%= boom %></a>
+				</div>
+			</div>
+			
+			<div class="companyTotal">
+				<div class="companytype">
+					<h3>Companies bankrupt:</h3>
+				</div>
+				<div>
+					<a href="/companylist/bust" type"bust" class="big"><%= bust %></a>
+				</div>	
+			</div>
+			<div class="about">
+				<p>About: This app has been built on data from PRH under Creative Commons 4.0 Nimeä license.</p>
+			</div>	
+		</div>
 	</div>
 </body>
 </html>

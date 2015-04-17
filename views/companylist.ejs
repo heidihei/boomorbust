@@ -2,24 +2,32 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Company details</title>
-		<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/stylesheets/style.css">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Boom or Bust</title>
 </head>
+
+
 <body>
-	<div class="container">						
+	<div class="navigationHome">
+		<div class="navright">
+			<li><a href="/">Home</a></li>
+			<li><a href="/user/login">Login</a></li>
+			<li><a href="/user/signup">Sign Up</a></li>
+		</div>
+	</div>						
 
-		<div class="col-xs-6 col-xs-offset-3">
-					<% companyList.forEach(function(company){ %>
+	<div class="companyList">
+		<% companyList.forEach(function(company){ %>
 
-						<h1><a class="companyLink" href="/company/<%=company.businessId%>"><%= company.name %></a></h1> <!--MAKE THIS A LINK TO COMPANY PAGE-->
-					<ul>
-						<li>Y-tunnus: <%= company.businessId %></li>
-					</ul>
-				<%	})	%>	
+		<h1><a class="companyLink" href="/company/<%=company.businessId%>"><%= company.name %></a></h1> <!--MAKE THIS A LINK TO COMPANY PAGE-->
+		<ul>
+			<p>Y-tunnus: <%= company.businessId %></p>
+		</ul>
+		<%	})	%>	
 					
-				</div>
-		
 	</div>
 </body>
 </html>

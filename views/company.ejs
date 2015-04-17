@@ -2,26 +2,32 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<title>Company: </title>
+	<link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/stylesheets/style.css">
+	<title>Boom or Bust</title>
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-6 col-xs-offset-3">
-				<h1>Company: <%= companyName %> </h1>
-				<p>Y-tunnus: <%= businessId %></p>
-				<p>Kotipaikka: <%= office %></p>
-
-				<form method="POST" action="/favorites">
-					
-					<input type="text" name="business_id" value="<%=businessId%>" style="display:none;">
-					<button>Save</button>
-				</form>
-
-			</div>
+	<div class="navigationHome">
+		<div class="navright">
+			<li><a href="/">Home</a></li>
+			<li><a href="/user/login">Login</a></li>
+			<li><a href="/user/signup">Sign Up</a></li>
 		</div>
 	</div>
+
+
+		<div class="selectedCompany">
+			<h1>Company: <%= companyName %> </h1>
+			<p>Business ID: <%= businessId %></p>
+			<p>Location: <%= office %></p>
+
+			<form method="POST" action="/favorites">
+				
+				<input type="text" name="business_id" value="<%=businessId%>" style="display:none;">
+				<button>Save</button>
+			</form>
+		</div>
+
 </body>
 </html>
 
