@@ -15,9 +15,7 @@ app.use(express.static('public'));
 app.use(session({
     secret: "secretsecret",
     resave: false,
-    save: {
-    uninitiialize: true
-    }
+    saveUninitialized: true
 }));
 
 app.use("/", function(req, res, next){
@@ -57,7 +55,7 @@ var getDate = function() {
 		'Dec': '12',
 	};
 
-	var date = da[3] + '-' + months[da[1]] + '-' + (Number(da[2]) - 2); 
+	var date = da[3] + '-' + months[da[1]] + '-' + (Number(da[2]) - 3); 
 
 	return date;
 };
@@ -169,16 +167,16 @@ app.get('/company/:id', function(req, res){
 	var url = "http://avoindata.prh.fi:80/bis/v1/"+companyId;
 
 	request(url, function (error, response, body){
-	if (!error && response.statusCode === 200) {
-	 		var jsonData = JSON.parse(body);
-	 		console.log(jsonData);
-	 		res.render('company', {
-	 			companyName: jsonData.results[0].name,
-	 			businessId: jsonData.results[0].businessId,
-	 			office: jsonData.results[0].registedOffices[0].name,
-	 		});
-		}
-	});
+		if (!error && response.statusCode === 200) {
+		 		var jsonData = JSON.parse(body);
+		 		console.log(jsonData);
+		 		res.render('company', {
+		 			companyName: jsonData.results[0].name,
+		 			businessId: jsonData.results[0].businessId,
+		 			office: jsonData.results[0].registedOffices[0].name,
+		 		});
+			}
+		});
 });
 
 
