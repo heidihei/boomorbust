@@ -9,7 +9,7 @@ html {
 a  {
 	text-decoration: none;
 	color:white;
-	font-family: 'Permanent Marker', cursive;
+	font-family: 'Permanent Marker', Helvetica, cursive;
 	}
 
 a:hover {
@@ -17,12 +17,12 @@ a:hover {
 	}
 
 h1 {
-	font-family: 'Permanent Marker', cursive;
+	font-family: 'Permanent Marker' Helvetica, cursive;
 	color: white;
 	}
 
 h3 {
-	font-family: 'Permanent Marker', cursive;
+	font-family: 'Permanent Marker', Helvetica cursive;
 	color: white;
 	font-size: 40px;
 	}
@@ -79,7 +79,7 @@ p {
 }
 
 .logo {
-	font-family: 'Permanent Marker', cursive;
+	font-family: 'Permanent Marker', Helvetica cursive;
 	font-size: 50px;
 	color: white;
 	background-color: rgba(30,30,30,0.7);
