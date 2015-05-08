@@ -32,7 +32,8 @@ li {
 }
 
 p {
-	font-family: 'Permanent Marker', cursive;
+	font-family: arial;
+	font-weight: lighter;
 	font-size: 21px;
 	color: white;
 	padding: 3px;
@@ -87,7 +88,7 @@ p {
 
 .navigationHome {
 	height: 30px;
-	background-color: rgba(30,30,30,0.7);
+	
 	position: relative;
 }
 
@@ -143,6 +144,12 @@ p {
 	}
 	.big {
 		padding: 25%;
+	}
+}
+
+@media (max-width: 740px) {
+	.logo {
+		font-size: 24px;
 	}
 }
 

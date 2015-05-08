@@ -32,52 +32,67 @@ app.use("/", function(req, res, next){
     req.logout = function(){
         req.session.userId = null;
         req.user = null;
-    }
+    };
     next();
 });
 
-//this will get the current date -1 day for each API call because the PRH database is updated at the end of the day
-var getDate = function() { 
+// this will get the current date -2 days for each API call because the PRH database is updated at the end of the day
+var getDate = function() {
+	// Get today's date
 	var d = new Date();
-	var da = d.toString().split(' ');
-	var months = {
-		'Jan': '01',
-		'Feb': '02',
-		'Mar': '03',
-		'Apr': '04',
-		'May': '05',
-		'Jun': '06',
-		'Jul': '07',
-		'Aug': '08',
-		'Sep': '09',
-		'Oct': '10',
-		'Nov': '11',
-		'Dec': '12',
-	};
 
-	var date = da[3] + '-' + months[da[1]] + '-' + (Number(da[2]) - 3); 
+	// Get yesterday's date by subtracting all seconds of one day
+	d.setDate(d.getDate() - 2);
 
+	// Get day, month and year
+	var day = d.getDate();
+	var month = d.getMonth();
+	var year = d.getFullYear();
+
+	// If day is one digit, prepend a 0
+	if (parseInt(day / 10) === 0) {
+		day = '0' + day;
+	}
+
+	// Add one to the month, because months start with 0
+	month += 1;
+
+	// If month is one digit, prepend a 0
+	if (parseInt(month / 10) === 0) {
+		month = '0' + month;
+	}
+
+	// Concat them
+	var date = year + '-' + month + '-' + day;
+
+	// Return
 	return date;
 };
 
 app.get('/', function(req, res){
-
-	var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&entryCode=PERUS&noticeRegistrationFrom="+getDate();+"&noticeRegistrationType=U";
+	console.log('in here 1');
+	var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&maxResults=150&resultsFrom=0&companyForm=OY&companyRegistrationFrom=2015-05-05&entryCode=PERUS"
+	//var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&entryCode=PERUS&noticeRegistrationFrom="+getDate()+"&noticeRegistrationType=U";
 	var request1 = function(cb) {
+		console.log('in here 2a');
 		request(urlBoom, function (error, response, header) {
+			console.log('in here 2b');
+						console.log(response.statusCode);
 		    if (!error && response.statusCode == 200) {
-		      console.log('request1', getDate());
+		      //console.log('request1', getDate());
 		      var jsonData = JSON.parse(header);
 		      var totalBoom = jsonData.totalResults;
 		      cb(null, totalBoom);
 		    }
 		});
 	};
-	
+	// var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&maxResults=100&resultsFrom=0&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom=2015-05-05"
 	var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom="+getDate();
 	var request2 = function(cb) {
+		console.log('in here 3a');
 		request(urlBust, function (error, response, header) {
-			console.log('in here', response.statusCode);
+			console.log('in here 3b');
+			console.log(response.statusCode);
 		    if (!error && response.statusCode == 200) {
 		      console.log('request2');
 		      var jsonData = JSON.parse(header);
@@ -95,7 +110,8 @@ app.get('/', function(req, res){
 });
 
 app.get('/company', function(req, res){
-	res.render('company');
+	var login = req.session.userId ? true : false;
+	res.render('company', {login: login});
 });
 
 app.get('/user/signup', function(req,res){
@@ -122,7 +138,7 @@ app.get('/user/profile', function(req, res){
 
 app.get('/companylist/:type', function(req, res){
 	
-	var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&maxResults=150&companyForm=OY&entryCode=PERUS&noticeRegistrationFrom="+getDate();+"&noticeRegistrationType=U";
+	var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&maxResults=150&companyForm=OY&entryCode=PERUS&noticeRegistrationFrom="+getDate()+"&noticeRegistrationType=U";
 	var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&maxResults=150&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom="+getDate();
 	
 
@@ -141,7 +157,6 @@ app.get('/companylist/:type', function(req, res){
 
 	// IF request has bust in it, do this	
 	} else if (req.params.type === "bust") {
-
 		request(urlBust, function (error, response, body) {
 		    if (!error && response.statusCode == 200) {
 		      var jsonData = JSON.parse(body);
@@ -160,10 +175,11 @@ app.delete('/logout', function(req,res){
 
 
 app.get('/company/:id', function(req, res){
+	var login = req.session.userId ? true : false;
 	var companyId = req.params.id;
 	console.log(companyId);	
 
-//THIS will call another API that provides more detailed info on companies	
+//THIS will call the other API that provides more detailed info on companies	
 	var url = "http://avoindata.prh.fi:80/bis/v1/"+companyId;
 
 	request(url, function (error, response, body){
@@ -174,18 +190,23 @@ app.get('/company/:id', function(req, res){
 		 			companyName: jsonData.results[0].name,
 		 			businessId: jsonData.results[0].businessId,
 		 			office: jsonData.results[0].registedOffices[0].name,
+		 			login: login
 		 		});
-			}
-		});
+		}
+	});
 });
 
 
 app.post('/favorites', function(req, res){
+	if (!req.session.userId) {
+		res.redirect('/user/login');
+	} else {
 	req.currentUser().then(function(user){
 		user.addToFavs(db, req.body.business_id).then(function(){
 			res.redirect('/user/profile');
 		});
 	});
+   }
 });
 
 app.get('/user/login', function(req,res){

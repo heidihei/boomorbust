@@ -10,8 +10,14 @@
 	<div class="navigationHome">
 		<div class="navright">
 			<li><a href="/">Home</a></li>
-			<li><a href="/user/login">Login</a></li>
-			<li><a href="/user/signup">Sign Up</a></li>
+			<% if (login) { %>
+				<form method="POST" action="/logout?_method=DELETE">
+					<button>Logout</button>
+				</form>
+			<% } else { %>
+				<li><a href="/user/login">Login</a></li>
+				<li><a href="/user/signup">Sign Up</a></li>
+			<% } %>
 		</div>
 	</div>
 
