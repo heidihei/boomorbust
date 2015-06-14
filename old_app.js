@@ -37,56 +37,37 @@ app.use("/", function(req, res, next){
 });
 
 // this will get the current date -2 days for each API call because the PRH database is updated at the end of the day
-var getDate = function(){
-    
-        var bizDate = Date();
-    
-        var today = bizDate.split(" ");
-    
-        var weekday = today[0];
-        
-        var d = new Date();
-        console.log(d);
-        var day = d.getDate();
-        var month = d.getMonth();
-        var year = d.getFullYear();
+var getDate = function() {
+    // Get today's date
+    var d = new Date();
 
-        console.log(day + "first");
-        console.log(weekday); 
+    // Get yesterday's date by subtracting all seconds of one day
+    d.setDate(d.getDate() - 2);
 
-// FIX THIS TO GO  THROUGH THE WHOLE THING AND IT'L BE GOOD
-        if (weekday === "Sun") {
-                day = (d.getDate() - 2);
-                console.log(day);       
-            } 
-        else if (weekday === "Mon") {
-                day = (d.getDate() - 3);
-                console.log(day);
-            }
+    // Get day, month and year
+    var day = d.getDate();
+    var month = d.getMonth();
+    var year = d.getFullYear();
 
-        else {
-                day = (d.getDate() - 1);
-                console.log(day);
-            };
-//********************************************
+    // If day is one digit, prepend a 0
+    if (parseInt(day / 10) === 0) {
+        day = '0' + day;
+    }
 
-        if (parseInt(day / 10) === 0) {
-            day = '0' + (day);
-        };
+    // Add one to the month, because months start with 0
+    month += 1;
 
-        console.log(day + "second");        
+    // If month is one digit, prepend a 0
+    if (parseInt(month / 10) === 0) {
+        month = '0' + month;
+    }
 
-        month += 1;
+    // Concat them
+    var date = year + '-' + month + '-' + day;
 
-        if (parseInt(month / 10) === 0) {
-            month = '0' + month;
-        };
-
-        var queryDate = year + '-' + month + '-' + day;
-
-    return queryDate;   
-    
-    };
+    // Return
+    return date;
+};
 
 app.get('/', function(req, res){
     console.log('in here 1');
@@ -199,7 +180,7 @@ app.get('/company/:id', function(req, res){
     console.log(companyId); 
 
 //THIS will call the other API that provides more detailed info on companies    
-    var url = "http://avoindata.prh.fi:80/bis/v1?totalResults=false&resultsFrom=0&businessId="+companyId;
+    var url = "http://avoindata.prh.fi:80/bis/v1/"+companyId;
 
     request(url, function (error, response, body){
         if (!error && response.statusCode === 200) {
@@ -209,7 +190,7 @@ app.get('/company/:id', function(req, res){
                     companyName: jsonData.results[0].name,
                     businessId: jsonData.results[0].businessId,
                     office: jsonData.results[0].registedOffices[0].name,
-                    // businessLine: jsonData.results[0].businessLines[0].name,
+                    businessLine: jsonData.results[0].businessLines[0].name,
                     login: login
                 });
         }
