@@ -105,7 +105,7 @@ app.get('/', function(req, res){
             }
         });
     };
-    // var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&maxResults=100&resultsFrom=0&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom=2015-05-05"
+    // var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&maxResults=100&resultsFrom=0&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom=2015-06-15"
     var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom="+getDate();
     var request2 = function(cb) {
         console.log('in here 3a');
@@ -159,6 +159,7 @@ app.get('/companylist/:type', function(req, res){
     
     var urlBoom = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&maxResults=150&companyForm=OY&entryCode=PERUS&noticeRegistrationFrom="+getDate()+"&noticeRegistrationType=U";
     var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&maxResults=150&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom="+getDate();
+    // var urlBust = "http://avoindata.prh.fi:80/tr/v1?totalResults=true&resultsFrom=0&maxResults=150&companyForm=OY&entryCode=KONALK&noticeRegistrationFrom=2015-06-15";
     
 
     // IF request has boom in it, do this
@@ -209,7 +210,8 @@ app.get('/company/:id', function(req, res){
                     companyName: jsonData.results[0].name,
                     businessId: jsonData.results[0].businessId,
                     office: jsonData.results[0].registedOffices[0].name,
-                    // businessLine: jsonData.results[0].businessLines[0].name,
+                    businessLine: jsonData.results[0].businessLines[0].name,
+                    registrationDate: jsonData.results[0].registrationDate,
                     login: login
                 });
         }

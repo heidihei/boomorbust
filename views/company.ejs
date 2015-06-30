@@ -4,6 +4,8 @@
 	<meta charset="UTF-8">
 	<link href='//fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="/stylesheets/style.css">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Boom or Bust</title>
 </head>
 <body>
@@ -24,8 +26,10 @@
 
 		<div class="selectedCompany">
 			<h1>Company: <%= companyName %> </h1>
+			<p>Founded: <%= registrationDate %></p>
 			<p>Business ID: <%= businessId %></p>
 			<p>Location: <%= office %></p>
+			<p>Business Line: <%= businessLine %></p>
 
 			<form method="POST" action="/favorites">
 				

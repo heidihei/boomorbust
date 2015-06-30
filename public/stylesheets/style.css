@@ -33,18 +33,21 @@ li {
 }
 
 p {
-	font-family: arial;
-	font-weight: lighter;
-	font-size: 21px;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
 	color: white;
-	padding: 3px;
 	}
 
 .about {
 	margin-left: 10%;
 	margin-right: 10%;
 	position: relative;
-	background-color: rgba(30,30,30,0.7);
+	/*background-color: rgba(30,30,30,0.7);*/
+	font-family: helvetica;
+	font-weight: lighter;
+	font-size: 14px;
+	color: white;
+	padding: 5px;
 }
 
 .big {
